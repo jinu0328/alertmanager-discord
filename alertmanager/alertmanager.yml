@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'discord-notifications'
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 5m
+
+receivers:
+  - name: 'discord-notifications' #알림 이름
+    webhook_configs:
+    - url: 'discord webhook url'
+      send_resolved: true
