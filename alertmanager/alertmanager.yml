@@ -2,13 +2,14 @@ global:
   resolve_timeout: 5m
 
 route:
+  group_by: ['alertname', 'job']
   receiver: 'discord-notifications'
   group_wait: 10s
   group_interval: 10s
   repeat_interval: 5m
 
 receivers:
-  - name: 'discord-notifications' #알림 이름
-    webhook_configs:
-    - url: 'discord webhook url'
+  - name: 'discord-notifications'
+    discord_configs:
+    - webhook_url: ''
       send_resolved: true

@@ -8,7 +8,7 @@ alerting:
         - targets: ['alertmanager:9093']
 
 rule_files:
-  - /etc/prometheus/alert-rules.yml #추가된 부분
+  - /etc/prometheus/alert-rules.yml
 
 scrape_configs:
   - job_name: 'prometheus-data'
