@@ -23,11 +23,12 @@ services:
       - ./Client/node_modules:/app/node_modules
     ports:
       - "5173:5173"
-    command: ["npm", "run", "dev", "--", "--host"]  # Vite 서버를 외부에서 접근할 수 있도록 설정
+    command: ["/bin/sh", "-c", "npm install && npm run dev -- --host"]  # npm install 후 Vite 서버 실행
     environment:
       - CHOKIDAR_USEPOLLING=true
     networks:
       - app-tier
+
   nginx:
     build:
       context: ./nginx
