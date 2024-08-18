@@ -5,7 +5,7 @@ services:
   web:
     build:
       context: ./APIServer
-    container_name: django_web
+    container_name: web
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./APIServer:/app
@@ -17,6 +17,7 @@ services:
   client:
     build:
       context: ./Client
+    container_name: client
     volumes:
       - ./Client:/app
       - ./Client/node_modules:/app/node_modules
@@ -25,6 +26,24 @@ services:
     command: ["npm", "run", "dev", "--", "--host"]  # Vite 서버를 외부에서 접근할 수 있도록 설정
     environment:
       - CHOKIDAR_USEPOLLING=true
+    networks:
+      - app-tier
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - web
+      - client
+    restart: always
+    networks:
+      - app-tier
+
 
   prometheus:
     image: prom/prometheus:latest
