@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   
   web:
@@ -11,6 +13,18 @@ services:
       - "8000:8000"
     networks:
       - app-tier
+  
+  client:
+    build:
+      context: ./Client
+    volumes:
+      - ./Client:/app
+      - ./Client/node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    command: ["npm", "run", "dev", "--", "--host"]  # Vite 서버를 외부에서 접근할 수 있도록 설정
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
   prometheus:
     image: prom/prometheus:latest
