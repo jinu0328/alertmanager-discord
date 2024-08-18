@@ -11,5 +11,5 @@ route:
 receivers:
   - name: 'discord-notifications'
     discord_configs:
-    - webhook_url: ''
+    - webhook_url: 'https://discord.com/api/webhooks/1271752311248650313/tcti6zwLHN53j13qXEQmyad5Abk4a2qnjbpniP_-vGikjjN10ItXfdABWbTdUXrJ3cL8'
       send_resolved: true
