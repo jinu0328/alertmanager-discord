@@ -1,11 +1,11 @@
-groups:
+groups: # 경고 예시 그룹
   - name: example
     rules:
       - alert: InstanceDown
-        expr: up == 0
-        for: 10s
+        expr: up == 0 # 경고가 트리거 되는 조건 (up이 1이면 인스턴스 정상, 0이면 인스턴스 다운)
+        for: 10s # 10초 이상 다운 된 상태일 경우 트리거
         labels:
-          severity: critical
+          severity: critical # 해당 경고의 심각도 지정
         annotations:
-          title: "Instance {{ $labels.instance }} down"
-          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+          title: "Instance {{ $labels.instance }} down" # 경고메세지의 제목
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute." # 경고 메세지의 설명

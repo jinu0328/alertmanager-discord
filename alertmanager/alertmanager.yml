@@ -1,15 +1,18 @@
 global:
-  resolve_timeout: 5m
+  resolve_timeout: 5m # 경고가 해결된 후, 해결 알림이 보내지기 전에 최대 5분 동안 대기
 
 route:
-  group_by: ['alertname', 'job']
-  receiver: 'discord-notifications'
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 5m
+  group_by: ['alertname', 'job'] # 경고 이름과 작업을 기준으로 경고 유형 나눔
+  receiver: 'discord-notifications' # 알림을 보낼 기본 수신자 설정 밑에 receivers 따로 정의
+  group_wait: 10s # 경고 그룹화 후, 처음 경고가 발생한 후 10초 동안 대기
+  group_interval: 10s # 동일한 그룹 내에서 알림을 보낼 때마다 10초의 간격을 유지
+  repeat_interval: 5m # 경고가 해결되지 않은 경우 5분 간격으로 알림 반복
 
 receivers:
-  - name: 'discord-notifications'
+  - name: 'discord-notifications' # route의 receiver와 같은 이름으로
     discord_configs:
+    # 디스코드 웹훅 url
     - webhook_url: 'https://discord.com/api/webhooks/1271752311248650313/tcti6zwLHN53j13qXEQmyad5Abk4a2qnjbpniP_-vGikjjN10ItXfdABWbTdUXrJ3cL8'
-      send_resolved: true
+      send_resolved: true # 경고 해결 시 해결 알람도 보내는 설정
+
+
