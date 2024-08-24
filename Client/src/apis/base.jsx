@@ -1,9 +1,18 @@
 import axios from 'axios';
+import { getCsrfToken } from '../utils/csrf';  // CSRF 토큰을 가져오는 함수
 
-// Axios 기본 설정
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000',  // Django 서버 URL
-  withCredentials: true,  // 쿠키 기반 세션 유지
+  baseURL: 'http://localhost:8000',  // Django API 서버 주소
+  withCredentials: true,  // 쿠키를 포함하여 요청
+});
+
+// Axios 요청 시마다 CSRF 토큰을 헤더에 추가
+apiClient.interceptors.request.use((config) => {
+  const csrfToken = getCsrfToken();
+  if (csrfToken) {
+    config.headers['X-CSRFToken'] = csrfToken;
+  }
+  return config;
 });
 
 export default apiClient;
