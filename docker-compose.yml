@@ -1,16 +1,51 @@
 version: '3'
 
 services:
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    env_file:
+      - .env
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'mysql_data:/var/lib/mysql'
+    restart: always
+    networks:
+      - app-tier
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    links:
+      - db
+    ports:
+      - 8085:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - app-tier
   
   web:
     build:
       context: ./APIServer
     container_name: web
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py makemigrations &&
+            python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
     volumes:
       - ./APIServer:/app
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    restart: always
     networks:
       - app-tier
   
@@ -94,6 +129,8 @@ services:
       - app-tier
     command: --config.file=/etc/alertmanager/alertmanager.yml --log.level=debug
 
+volumes:
+  mysql_data:
 
 networks:
   app-tier:
