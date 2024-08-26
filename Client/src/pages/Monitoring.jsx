@@ -6,10 +6,21 @@ import LineChart from '../components/LineChart';
 const Monitoring = () => {
   const [cpuData, setCpuData] = useState(null);
   const [memoryData, setMemoryData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 메모리 데이터를 사람이 읽기 쉬운 단위로 변환하는 함수
+  const formatMemory = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
+    if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+  };
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
+        setLoading(true);  // 데이터 로드 시작
+
         // CPU 데이터 가져오기
         const cpuResponse = await axios.get('http://localhost:9090/api/v1/query_range', {
           params: {
@@ -19,7 +30,8 @@ const Monitoring = () => {
             step: '5s',
           },
         });
-        
+
+        // 메모리 데이터 가져오기
         const memoryResponse = await axios.get('http://localhost:9090/api/v1/query_range', {
           params: {
             query: 'node_memory_MemAvailable_bytes',
@@ -47,11 +59,11 @@ const Monitoring = () => {
           ],
         });
 
-        // 메모리 데이터 처리
+        // 메모리 데이터 처리 (숫자로 처리)
         const memoryLabels = memoryResponse.data.data.result[0].values.map((entry) =>
           new Date(entry[0] * 1000).toLocaleTimeString()
         );
-        const memoryValues = memoryResponse.data.data.result[0].values.map((entry) => entry[1]);
+        const memoryValues = memoryResponse.data.data.result[0].values.map((entry) => parseFloat(entry[1]));
 
         setMemoryData({
           labels: memoryLabels,
@@ -64,25 +76,39 @@ const Monitoring = () => {
             },
           ],
         });
+
+        setLoading(false);  // 데이터 로드 완료
       } catch (error) {
         console.error('Error fetching data', error);
+        setLoading(false);  // 에러 발생 시에도 로딩 종료
       }
     };
 
-    fetchMetrics();
+    fetchMetrics();  // 최초 실행
+
+    // 10초마다 갱신
+    const intervalId = setInterval(fetchMetrics, 10000);  // 10초마다 갱신
+
+    // 컴포넌트 언마운트 시 인터벌 제거
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
     <div>
       <h1>Monitoring Dashboard</h1>
 
-      <div style={{ margin: '20px 0' }}>
-        {cpuData && <LineChart data={cpuData} title="CPU Usage Over Time" />}
-      </div>
-
-      <div style={{ margin: '20px 0' }}>
-        {memoryData && <LineChart data={memoryData} title="Memory Usage Over Time" />}
-      </div>
+      {loading ? (
+        <p>Loading data...</p>
+      ) : (
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ flex: 1, margin: '10px' }}>
+            {cpuData && <LineChart data={cpuData} title="CPU Usage Over Time" />}
+          </div>
+          <div style={{ flex: 1, margin: '10px' }}>
+            {memoryData && <LineChart data={memoryData} title="Memory Usage Over Time" />}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
