@@ -15,19 +15,19 @@ services:
     networks:
       - app-tier
 
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    links:
-      - db
-    ports:
-      - 8085:80
-    environment:
-      PMA_ARBITRARY: 1
-      PMA_HOST: db
-      PMA_PORT: 3306
-    networks:
-      - app-tier
+#  phpmyadmin:
+#    image: phpmyadmin
+#    restart: always
+#    links:
+#      - db
+#    ports:
+#      - 8085:80
+#    environment:
+#      PMA_ARBITRARY: 1
+#      PMA_HOST: db
+#      PMA_PORT: 3306
+#    networks:
+#      - app-tier
   
   web:
     build:
