@@ -2,12 +2,12 @@
 import axios from 'axios';
 
 // Prometheus 서버 URL 설정
-const PROMETHEUS_URL = 'http://<prometheus-server>';  // Prometheus 서버 주소
+const PROMETHEUS_URL = 'http://117.16.251.24:9090';  // Prometheus 서버 주소
 
 // 현재 메트릭 데이터를 가져오는 함수
 export const fetchMetrics = async (query) => {
   try {
-    const response = await axios.get(`http://localhost:9090/api/v1/query`, {
+    const response = await axios.get(`http://117.16.251.24:9090/api/v1/query`, {
       params: {
         query: query,  // PromQL 쿼리
       },
