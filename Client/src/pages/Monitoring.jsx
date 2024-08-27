@@ -22,7 +22,7 @@ const Monitoring = () => {
         setLoading(true);  // 데이터 로드 시작
 
         // CPU 데이터 가져오기
-        const cpuResponse = await axios.get('http://117.16.251.24:9090/api/v1/query_range', {
+        const cpuResponse = await axios.get('http://117.16.251.24/prometheus/api/v1/query_range', {
           params: {
             query: 'node_cpu_seconds_total',
             start: new Date(Date.now() - 60 * 60 * 1000).toISOString(),  // 1시간 전
@@ -31,8 +31,8 @@ const Monitoring = () => {
           },
         });
 
-        // 메모리 데이터 가져오기
-        const memoryResponse = await axios.get('http://117.16.251.24:9090/api/v1/query_range', {
+        // 메모리 데이터 가져오기 
+        const memoryResponse = await axios.get('http://117.16.251.24/prometheus/api/v1/query_range', {
           params: {
             query: 'node_memory_MemAvailable_bytes',
             start: new Date(Date.now() - 60 * 60 * 1000).toISOString(),  // 1시간 전
