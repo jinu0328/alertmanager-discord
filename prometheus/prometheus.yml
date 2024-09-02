@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 5m  # 데이터 수집 주기를 5분으로 설정
+  evaluation_interval: 5m  # 평가 주기도 5분으로 설정
 
 alerting:
   alertmanagers:
@@ -14,21 +14,21 @@ scrape_configs:
   - job_name: 'prometheus-data'
     static_configs:
       - targets: ['prometheus:9090']
+    scrape_timeout: 1m  # 스크랩 최대 대기 시간을 1분으로 설정
 
   - job_name: 'node-data'
     static_configs:
       - targets: [ 'node_exporter:9100' ]
+    scrape_timeout: 1m  # 스크랩 최대 대기 시간을 1분으로 설정
 
   # GPU 서버 1
   - job_name: 'gpu-server-1'
     static_configs:
       - targets: ['192.168.122.104:9400']
-    scrape_timeout: 1m
+    scrape_timeout: 1m  # 스크랩 최대 대기 시간을 1분으로 설정
 
   # GPU 서버 2
   - job_name: 'gpu-server-2'
     static_configs:
       - targets: ['192.168.122.105:9400']
-    scrape_timeout: 1m
-
-
+    scrape_timeout: 1m  # 스크랩 최대 대기 시간을 1분으로 설정
