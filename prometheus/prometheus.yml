@@ -21,18 +21,18 @@ scrape_configs:
       - targets: [ 'node_exporter:9100' ]
     scrape_timeout: 30s
 
-  # GPU 서버 1
-  - job_name: 'gpu-server-1'
-    static_configs:
-      - targets: ['192.168.122.104:9400']
-    scrape_timeout: 1m
-    tls_config:
-      insecure_skip_verify: true
-
-  # GPU 서버 2
-  - job_name: 'gpu-server-2'
-    static_configs:
-      - targets: ['192.168.122.105:9400']
-    scrape_timeout: 1m
-    tls_config:
-      insecure_skip_verify: true
+#  # GPU 서버 1
+#  - job_name: 'gpu-server-1'
+#    static_configs:
+#      - targets: ['192.168.122.104:9400']
+#    scrape_timeout: 1m
+#    tls_config:
+#      insecure_skip_verify: true
+#
+#  # GPU 서버 2
+#  - job_name: 'gpu-server-2'
+#    static_configs:
+#      - targets: ['192.168.122.105:9400']
+#    scrape_timeout: 1m
+#    tls_config:
+#      insecure_skip_verify: true
