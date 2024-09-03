@@ -23,7 +23,7 @@ const Monitoring = () => {
         setLoading(true);  // 데이터 로드 시작
 
         // GPU 서버 1에서 GPU 온도 데이터 가져오기
-        const gpu1Response = await axios.get('http://117.16.251.24/prometheus/api/v1/query_range', {
+        const gpu1Response = await axios.get('http://localhost/prometheus/api/v1/query_range', {
           params: {
             query: 'DCGM_FI_DEV_GPU_TEMP{instance="192.168.122.104:9400"}',
             start: new Date(Date.now() - 60 * 60 * 1000).toISOString(),  // 1시간 전
