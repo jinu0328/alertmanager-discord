@@ -24,7 +24,7 @@ scrape_configs:
   # GPU 서버 1
   - job_name: 'gpu-server-1'
     static_configs:
-      - targets: ['192.168.122.104:9400']
+      - targets: ['117.16.196.144:9400']
     scrape_timeout: 1m
     tls_config:
       insecure_skip_verify: true
